@@ -4,10 +4,12 @@ import {
   StyleSheet,
   Text,
   Image,
-  View
+  View,
+  TouchableOpacity,
 } from 'react-native';
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
+import { ApolloConsumer } from 'react-apollo';
+
 
 
 const instructions = Platform.select({
@@ -17,38 +19,56 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-const GET_DOG = gql`
-  query {
-    dog(breed: "pavilion") {
-      id
-      breed
-      displayImage
-    }
-  }
-`
+// const GET_DOG = gql`
+//   query {
+//     dog(breed: "pavilion") {
+//       id
+//       breed
+//       displayImage
+//     }
+//   }
+// `
 type Props = {};
 export default class App extends Component<Props> {
+  constructor(props){
+  	super(props);
+  	this.state = {
+      dog: null,
+    };
+  }
+
+  onDogFetched = dog => this.setState(() => ({ dog }));
+
   render() {
     console.log(this.props);
     return (
-      <Query query={GET_DOG} pollInterval={500}>
-     {({ loading, error, data, startPolling, stopPolling }) => {
-       if (loading) return <Text>Loading...</Text>;
-       if (error) return <Text>Error :(</Text>;
+      <ApolloConsumer>
+         {client => (
+           <View>
+             {this.state.dog &&
+               <Image
+                 source={{uri: this.state.dog.displayImage}}
+                 style={{height: 100, width: 100}}
+               />
+             }
+             <TouchableOpacity
+               onPress={async () => {
+                 const { data } = await client.query({
+                   query: GET_DOG_PHOTO,
+                   variables: { breed: "bulldog" }
+                 }).then((data) => {
 
-       return (
-         <View>
-           <Image
-             source={{uri: data.dog.displayImage}}
-             style={{width: 100, height: 100}}
-           />
-           <Text>
-             {data.dog.breed}
-           </Text>
-         </View>
-       )
-     }}
-   </Query>
+                   this.onDogFetched(data.dog);
+                 })
+               }}
+             >
+               <Text>
+                 Click me!
+               </Text>
+             </TouchableOpacity>
+           </View>
+         )}
+       </ApolloConsumer>
     );
   }
 }

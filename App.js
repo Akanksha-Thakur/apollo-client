@@ -19,7 +19,7 @@ const instructions = Platform.select({
 
 const GET_DOG = gql`
   query {
-    dog(breed: "pavilion") {
+    dog(breed: "bulldog") {
       id
       breed
       displayImage

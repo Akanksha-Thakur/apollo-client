@@ -19,15 +19,15 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-// const GET_DOG = gql`
-//   query {
-//     dog(breed: "pavilion") {
-//       id
-//       breed
-//       displayImage
-//     }
-//   }
-// `
+const GET_DOG_PHOTO = gql`
+  query dog($breed: String!) {
+    dog(breed: $breed) {
+      id
+      displayImage
+    }
+  }
+`;
+
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props){
@@ -44,22 +44,22 @@ export default class App extends Component<Props> {
     return (
       <ApolloConsumer>
          {client => (
-           <View>
+           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
              {this.state.dog &&
                <Image
-                 source={{uri: this.state.dog.displayImage}}
-                 style={{height: 100, width: 100}}
+                 source={{ uri: this.state.dog.displayImage }}
+                 style={{ height: 100, width: 100 }}
                />
              }
              <TouchableOpacity
-               onPress={async () => {
-                 const { data } = await client.query({
+               onPress={() => {
+                 const { data } = client.query({
                    query: GET_DOG_PHOTO,
                    variables: { breed: "bulldog" }
                  }).then((data) => {
-
-                   this.onDogFetched(data.dog);
-                 })
+                   debugger;
+                   this.onDogFetched(data.data.dog);
+                 });
                }}
              >
                <Text>

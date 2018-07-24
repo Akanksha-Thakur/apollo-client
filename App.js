@@ -20,6 +20,13 @@ const instructions = Platform.select({
 });
 
 
+const myNewTodo = {
+  id: '6',
+  text: 'Start using Apollo Client.',
+  completed: false,
+  __typename: 'Todo',
+};
+
 
 const GET_DOG = gql`
   query {
@@ -42,6 +49,18 @@ export default class App extends Component<Props> {
     console.log(client.cache);
     debugger
     const data = client.readQuery({ query: GET_DOG });
+    client.writeQuery({
+      query: GET_DOG,
+      data: {
+        dog: {
+          id: data.dog.id,
+          breed: data.dog.breed,
+          displayImage: data.dog.displayImage,
+          __typename: 'dog',
+        },
+      },
+    });
+    console.log(client.cache);
     debugger
   }
 

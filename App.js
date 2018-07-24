@@ -72,7 +72,7 @@ export default class App extends Component<Props> {
        if (error) return <Text>Error :(</Text>;
        if (data) this.getCache();
        return (
-         <View>
+         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
            <Image
              source={{uri: data.dog.displayImage}}
              style={{width: 100, height: 100}}

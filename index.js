@@ -6,9 +6,11 @@ import { ApolloProvider } from "react-apollo";
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import App from './App';
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: new HttpLink({uri: "https://nx9zvp49q7.lp.gql.zone/graphql"}),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+     dataIdFromObject: object => object.__typename || null,
+  }),
 });
 
 const View = () => (

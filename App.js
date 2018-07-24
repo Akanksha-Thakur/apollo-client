@@ -8,6 +8,8 @@ import {
 } from 'react-native';
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
+import { client } from './index';
+
 
 
 const instructions = Platform.select({
@@ -16,6 +18,8 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
+
+
 
 const GET_DOG = gql`
   query {
@@ -28,14 +32,26 @@ const GET_DOG = gql`
 `
 type Props = {};
 export default class App extends Component<Props> {
+  constructor(props){
+  	super(props);
+    this.getCache = this.getCache.bind(this);
+  	this.state = {};
+  }
+
+  getCache() {
+    console.log(client.cache);
+    debugger
+    const data = client.readQuery({ query: GET_DOG });
+    debugger
+  }
+
   render() {
-    console.log(this.props);
     return (
-      <Query query={GET_DOG} pollInterval={500}>
+        <Query query={GET_DOG} pollInterval={500}>
      {({ loading, error, data, startPolling, stopPolling }) => {
        if (loading) return <Text>Loading...</Text>;
        if (error) return <Text>Error :(</Text>;
-
+       if (data) this.getCache();
        return (
          <View>
            <Image

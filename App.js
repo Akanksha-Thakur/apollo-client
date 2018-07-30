@@ -6,9 +6,9 @@ import {
   Image,
   View
 } from 'react-native';
-import gql from "graphql-tag";
+import { GET_DOG } from './src/dog'
 import { Query } from "react-apollo";
-import { client } from './index';
+// import { client } from './index';
 
 
 
@@ -28,15 +28,7 @@ const myNewTodo = {
 };
 
 
-const GET_DOG = gql`
-  query {
-    dog(breed: "bulldog") {
-      id
-      breed
-      displayImage
-    }
-  }
-`
+
 type Props = {};
 export default class App extends Component<Props> {
   constructor(props){

@@ -45,32 +45,32 @@ export default class App extends Component<Props> {
   	this.state = {};
   }
 
-  getCache() {
-    console.log(client.cache);
+  getCache(data) {
     debugger
-    const data = client.readQuery({ query: GET_DOG });
-    client.writeQuery({
-      query: GET_DOG,
-      data: {
-        dog: {
-          id: data.dog.id,
-          breed: data.dog.breed,
-          displayImage: data.dog.displayImage,
-          __typename: 'dog',
-        },
-      },
-    });
-    console.log(client.cache);
-    debugger
+    // const data = client.readQuery({ query: GET_DOG });
+    // debugger
+    // client.writeQuery({
+    //   query: GET_DOG,
+    //   data: {
+    //     dog: {
+    //       id: data.dog.id,
+    //       breed: data.dog.breed,
+    //       displayImage: data.dog.displayImage,
+    //       __typename: 'dog',
+    //     },
+    //   },
+    // });
+    // console.log(client.cache);
   }
 
   render() {
+    console.log('data.............', this.props);
     return (
-        <Query query={GET_DOG} pollInterval={500}>
-     {({ loading, error, data, startPolling, stopPolling }) => {
+        <Query query={GET_DOG}>
+     {({ loading, error, data, networkStatus }) => {
        if (loading) return <Text>Loading...</Text>;
        if (error) return <Text>Error :(</Text>;
-       if (data) this.getCache();
+       if (data) this.getCache(data);
        return (
          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
            <Image

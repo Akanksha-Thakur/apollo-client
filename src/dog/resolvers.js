@@ -1,7 +1,7 @@
 export const resolvers = {
   Query: {
     getUpdate: (_, { dog }, { cache }) => {
-      const data = {
+      const dog = {
         dog: {
           id: dog.id,
           breed: dog.breed,
@@ -9,8 +9,8 @@ export const resolvers = {
           __typename: 'dog',
         },
       }
-      cache.writeDate({ data });
-      return null;
+      cache.writeDate({ dog });
+      return dog;
     }
   }
 }
